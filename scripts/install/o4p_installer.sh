@@ -23,10 +23,20 @@ do
       ;;
   esac
 done
-controller="sh1106"
-contrast="85"
-mode="full"
 
+if [[ ${INTERACTIVE} != "true" ]]; then
+    install_conf="o4p_installer.config"
+    # check if config file exists
+    if [[ -f "${install_conf}" ]]; then
+        # Source config file
+        source "${install_conf}"
+        cat "${install_conf}"
+        echo ""
+    else
+        echo "ERROR: ${install_conf} does not exist!"
+        exit 1
+    fi
+fi
 
 if [[ ${INTERACTIVE} == "true" ]]; then
     clear
