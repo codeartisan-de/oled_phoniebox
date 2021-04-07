@@ -13,200 +13,224 @@ yellow="\e[1;93m"
 green="\e[1;92m"
 installPath="/home/pi/oled_phoniebox"
 
-clear
-echo -e "////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-echo -e "///${cyan}                                                                                                          ${nocolor}///";
-echo -e "///${cyan}        ██████╗ ██╗     ███████╗██████╗     ██████╗ ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗          ${nocolor}///";
-echo -e "///${cyan}       ██╔═══██╗██║     ██╔════╝██╔══██╗    ██╔══██╗██║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝          ${nocolor}///";
-echo -e "///${cyan}       ██║   ██║██║     █████╗  ██║  ██║    ██║  ██║██║███████╗██████╔╝██║     ███████║ ╚████╔╝           ${nocolor}///";
-echo -e "///${cyan}       ██║   ██║██║     ██╔══╝  ██║  ██║    ██║  ██║██║╚════██║██╔═══╝ ██║     ██╔══██║  ╚██╔╝            ${nocolor}///";
-echo -e "///${cyan}       ╚██████╔╝███████╗███████╗██████╔╝    ██████╔╝██║███████║██║     ███████╗██║  ██║   ██║             ${nocolor}///";
-echo -e "///${cyan}        ╚═════╝ ╚══════╝╚══════╝╚═════╝     ╚═════╝ ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝             ${nocolor}///";
-echo -e "///${cyan}                                                                                                          ${nocolor}///";
-echo -e "///${cyan}   ███████╗ ██████╗ ██████╗     ██████╗ ██╗  ██╗ ██████╗ ███╗   ██╗██╗███████╗██████╗  ██████╗ ██╗  ██╗   ${nocolor}///";
-echo -e "///${cyan}   ██╔════╝██╔═══██╗██╔══██╗    ██╔══██╗██║  ██║██╔═══██╗████╗  ██║██║██╔════╝██╔══██╗██╔═══██╗╚██╗██╔╝   ${nocolor}///";
-echo -e "///${cyan}   █████╗  ██║   ██║██████╔╝    ██████╔╝███████║██║   ██║██╔██╗ ██║██║█████╗  ██████╔╝██║   ██║ ╚███╔╝    ${nocolor}///";
-echo -e "///${cyan}   ██╔══╝  ██║   ██║██╔══██╗    ██╔═══╝ ██╔══██║██║   ██║██║╚██╗██║██║██╔══╝  ██╔══██╗██║   ██║ ██╔██╗    ${nocolor}///";
-echo -e "///${cyan}   ██║     ╚██████╔╝██║  ██║    ██║     ██║  ██║╚██████╔╝██║ ╚████║██║███████╗██████╔╝╚██████╔╝██╔╝ ██╗   ${nocolor}///";
-echo -e "///${cyan}   ╚═╝      ╚═════╝ ╚═╝  ╚═╝    ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝   ${nocolor}///";
-echo -e "///${cyan}                                                                                                          ${nocolor}///";
-echo -e "////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-echo -e "///                                                                                                          ///"
-echo -e "///${cyan}                               https://github.com/splitti/oled_phoniebox                                  ${nocolor}///"
-echo -e "///                                                                                                          ///"
-echo -e "////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
-echo -e ""
-echo -e "${red}Please notice:${nocolor} This script will install all needed components for the OLED-Display (Format 128 X 64px) with"
-echo -e "SH1106- or SSD1306-Controller. A preinstallation of the jukebox4kids or similiar (MPC) will be needed."
-echo -e " "
+INTERACTIVE=true
+while getopts ":a" opt;
+do
+  case ${opt} in
+    a ) INTERACTIVE=false
+      ;;
+    \? ) echo "Usage: o4p_installer.sh [-a]"
+      ;;
+  esac
+done
+controller="sh1106"
+contrast="85"
+mode="full"
+
+
+if [[ ${INTERACTIVE} == "true" ]]; then
+    clear
+    echo -e "////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+    echo -e "///${cyan}                                                                                                          ${nocolor}///";
+    echo -e "///${cyan}        ██████╗ ██╗     ███████╗██████╗     ██████╗ ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗          ${nocolor}///";
+    echo -e "///${cyan}       ██╔═══██╗██║     ██╔════╝██╔══██╗    ██╔══██╗██║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝          ${nocolor}///";
+    echo -e "///${cyan}       ██║   ██║██║     █████╗  ██║  ██║    ██║  ██║██║███████╗██████╔╝██║     ███████║ ╚████╔╝           ${nocolor}///";
+    echo -e "///${cyan}       ██║   ██║██║     ██╔══╝  ██║  ██║    ██║  ██║██║╚════██║██╔═══╝ ██║     ██╔══██║  ╚██╔╝            ${nocolor}///";
+    echo -e "///${cyan}       ╚██████╔╝███████╗███████╗██████╔╝    ██████╔╝██║███████║██║     ███████╗██║  ██║   ██║             ${nocolor}///";
+    echo -e "///${cyan}        ╚═════╝ ╚══════╝╚══════╝╚═════╝     ╚═════╝ ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝             ${nocolor}///";
+    echo -e "///${cyan}                                                                                                          ${nocolor}///";
+    echo -e "///${cyan}   ███████╗ ██████╗ ██████╗     ██████╗ ██╗  ██╗ ██████╗ ███╗   ██╗██╗███████╗██████╗  ██████╗ ██╗  ██╗   ${nocolor}///";
+    echo -e "///${cyan}   ██╔════╝██╔═══██╗██╔══██╗    ██╔══██╗██║  ██║██╔═══██╗████╗  ██║██║██╔════╝██╔══██╗██╔═══██╗╚██╗██╔╝   ${nocolor}///";
+    echo -e "///${cyan}   █████╗  ██║   ██║██████╔╝    ██████╔╝███████║██║   ██║██╔██╗ ██║██║█████╗  ██████╔╝██║   ██║ ╚███╔╝    ${nocolor}///";
+    echo -e "///${cyan}   ██╔══╝  ██║   ██║██╔══██╗    ██╔═══╝ ██╔══██║██║   ██║██║╚██╗██║██║██╔══╝  ██╔══██╗██║   ██║ ██╔██╗    ${nocolor}///";
+    echo -e "///${cyan}   ██║     ╚██████╔╝██║  ██║    ██║     ██║  ██║╚██████╔╝██║ ╚████║██║███████╗██████╔╝╚██████╔╝██╔╝ ██╗   ${nocolor}///";
+    echo -e "///${cyan}   ╚═╝      ╚═════╝ ╚═╝  ╚═╝    ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝   ${nocolor}///";
+    echo -e "///${cyan}                                                                                                          ${nocolor}///";
+    echo -e "////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+    echo -e "///                                                                                                          ///"
+    echo -e "///${cyan}                               https://github.com/splitti/oled_phoniebox                                  ${nocolor}///"
+    echo -e "///                                                                                                          ///"
+    echo -e "////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+    echo -e ""
+    echo -e "${red}Please notice:${nocolor} This script will install all needed components for the OLED-Display (Format 128 X 64px) with"
+    echo -e "SH1106- or SSD1306-Controller. A preinstallation of the jukebox4kids or similiar (MPC) will be needed."
+    echo -e " "
+fi
+
 if [ -d "/home/pi/RPi-Jukebox-RFID" ]; then
 	echo -e "${green}RPi-Jukebox-RFID seems to be installed${nocolor}"
 	echo -e " "
 else
 	echo -e "${red}RPi-Jukebox-RFID is missing! Please install necessarily.${nocolor}"
 	echo -e " "
+    if [[ ${INTERACTIVE} != "true" ]]; then
+        exit 1
+    fi
 fi
 
-echo -e "Do you want to install this OLED-Display-Service?"
-echo -e " "
-options=("Install" "Quit")
+if [[ ${INTERACTIVE} == "true" ]]; then
+    echo -e "Do you want to install this OLED-Display-Service?"
+    echo -e " "
+    options=("Install" "Quit")
 
-select opt in "${options[@]}"
-do
-    case $opt in
-        "Install")
-            break
-            ;;
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "Install")
+                break
+                ;;
 
-        "Quit")
-            exit
-            ;;
-        *) echo -e "invalid option $REPLY";;
-    esac
-done
+            "Quit")
+                exit
+                ;;
+            *) echo -e "invalid option $REPLY";;
+        esac
+    done
 
-clear
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e "///${cyan}   Please choose your display controller type:                ${nocolor}///"
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e ""
-echo -e "Which type of OLED-Controller should be installed (needed for the "
-echo -e "Service-Startup):?"
-echo -e " "
-options=("ssd1306" "sh1106" "Quit")
+    clear
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e "///${cyan}   Please choose your display controller type:                ${nocolor}///"
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e ""
+    echo -e "Which type of OLED-Controller should be installed (needed for the "
+    echo -e "Service-Startup):?"
+    echo -e " "
+    options=("ssd1306" "sh1106" "Quit")
 
-select opt in "${options[@]}"
-do
-    case $opt in
-        "ssd1306")
-            controller="ssd1306"
-            break
-            ;;
-        "sh1106")
-            controller="sh1106"
-            break
-            ;;
-        "Quit")
-            exit
-            ;;
-        *) echo -e "Invalid option $REPLY";;
-    esac
-done
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "ssd1306")
+                controller="ssd1306"
+                break
+                ;;
+            "sh1106")
+                controller="sh1106"
+                break
+                ;;
+            "Quit")
+                exit
+                ;;
+            *) echo -e "Invalid option $REPLY";;
+        esac
+    done
 
-clear
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e "///${cyan}   Please choose your display brightness:                     ${nocolor}///"
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e ""
-echo -e "Choose your initial setting for brightness, you can change it later:"
-echo -e " "
-options=("1 dark" "2 normal" "3 bright" "4 very bright" "Quit")
+    clear
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e "///${cyan}   Please choose your display brightness:                     ${nocolor}///"
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e ""
+    echo -e "Choose your initial setting for brightness, you can change it later:"
+    echo -e " "
+    options=("1 dark" "2 normal" "3 bright" "4 very bright" "Quit")
 
-select opt in "${options[@]}"
-do
-    case $opt in
-        "1 dark")
-			echo -e ""
-            contrast="0"
-			echo -e " "
-            break
-            ;;
-        "2 normal")
-            echo -e ""
-			contrast="85"
-			echo -e " "
-            break
-            ;;
-        "3 bright")
-            echo -e ""
-			contrast="170"
-			echo -e " "
-            break
-            ;;
-        "4 very bright")
-            echo -e ""
-			contrast="255"
-			echo -e " "
-            break
-            ;;
-        "Quit")
-            exit
-            ;;
-        *) echo -e "Invalid option $REPLY";;
-    esac
-done
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "1 dark")
+                echo -e ""
+                contrast="0"
+                echo -e " "
+                break
+                ;;
+            "2 normal")
+                echo -e ""
+                contrast="85"
+                echo -e " "
+                break
+                ;;
+            "3 bright")
+                echo -e ""
+                contrast="170"
+                echo -e " "
+                break
+                ;;
+            "4 very bright")
+                echo -e ""
+                contrast="255"
+                echo -e " "
+                break
+                ;;
+            "Quit")
+                exit
+                ;;
+            *) echo -e "Invalid option $REPLY";;
+        esac
+    done
 
-clear
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e "///${cyan}   Please choose your display mode:                           ${nocolor}///"
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e ""
-echo -e "${cyan}Full${nocolor} is a display mode with much informations like"
-echo -e "  -> Tracks and Trackinformations"
-echo -e "  -> Wifi-Signal"
-echo -e ""
-echo -e "${cyan}Lite${nocolor} is a simple display mode just showing the"
-echo -e "Tracknr. and WLAN-Signal, other featues like brightness control are"
-echo -e "still available."
-echo -e ""
-echo -e "${cyan}Mix${nocolor} is a mix between lite and full without"
-echo -e "Trackinformations like Name, Album and so on. Just Tracks, WLAN-"
-echo -e "Signal, Volume and Length."
-echo -e ""
-echo -e "Choose your Display mode.:"
-echo -e " "
-options=("Full" "Lite" "Mix" "Quit")
-select opt in "${options[@]}"
-do
-    case $opt in
-        "Full")
-			echo -e ""
-            mode="full"
-			echo -e " "
-            break
-            ;;
-        "Lite")
-            echo -e ""
-			mode="lite"
-			echo -e " "
-            break
-            ;;
-        "Mix")
-            echo -e ""
-			mode="mix"
-			echo -e " "
-            break
-            ;;
-        "Quit")
-            exit
-            ;;
-        *) echo -e "Invalid option $REPLY";;
-    esac
-done
+    clear
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e "///${cyan}   Please choose your display mode:                           ${nocolor}///"
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e ""
+    echo -e "${cyan}Full${nocolor} is a display mode with much informations like"
+    echo -e "  -> Tracks and Trackinformations"
+    echo -e "  -> Wifi-Signal"
+    echo -e ""
+    echo -e "${cyan}Lite${nocolor} is a simple display mode just showing the"
+    echo -e "Tracknr. and WLAN-Signal, other featues like brightness control are"
+    echo -e "still available."
+    echo -e ""
+    echo -e "${cyan}Mix${nocolor} is a mix between lite and full without"
+    echo -e "Trackinformations like Name, Album and so on. Just Tracks, WLAN-"
+    echo -e "Signal, Volume and Length."
+    echo -e ""
+    echo -e "Choose your Display mode.:"
+    echo -e " "
+    options=("Full" "Lite" "Mix" "Quit")
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "Full")
+                echo -e ""
+                mode="full"
+                echo -e " "
+                break
+                ;;
+            "Lite")
+                echo -e ""
+                mode="lite"
+                echo -e " "
+                break
+                ;;
+            "Mix")
+                echo -e ""
+                mode="mix"
+                echo -e " "
+                break
+                ;;
+            "Quit")
+                exit
+                ;;
+            *) echo -e "Invalid option $REPLY";;
+        esac
+    done
 
-clear
-cd
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e "///${cyan}   Check/Install Prerequirements:                             ${nocolor}///"
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e " "
-echo -e "Do you want to start the installation of needed packages?"
-echo -e " "
-options=("Install" "Quit")
+    clear
+    cd
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e "///${cyan}   Check/Install Prerequirements:                             ${nocolor}///"
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e " "
+    echo -e "Do you want to start the installation of needed packages?"
+    echo -e " "
+    options=("Install" "Quit")
 
-select opt in "${options[@]}"
-do
-    case $opt in
-        "Install")
-            break
-            ;;
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "Install")
+                break
+                ;;
 
-        "Quit")
-            exit
-            ;;
-        *) echo -e "invalid option $REPLY";;
-    esac
-done
+            "Quit")
+                exit
+                ;;
+            *) echo -e "invalid option $REPLY";;
+        esac
+    done
+fi
+
 echo -e ""
 echo -e "Starting installation-process, pleae wait, some steps taking"
 echo -e "minutes, especially the luma-Packages..."
@@ -318,10 +342,13 @@ if [ -f /etc/modprobe.d/raspi-blacklist.conf ]; then
   sudo sed -i 's/^blacklist i2c-bcm2708/#blacklist i2c-bcm2708/' /etc/modprobe.d/raspi-blacklist.conf
 fi
 
-echo -e ""
-read -n 1 -s -r -p "Press any key to continue"
+if [[ ${INTERACTIVE} == "true" ]]; then
+    echo -e ""
+    read -n 1 -s -r -p "Press any key to continue"
 
-clear
+    clear
+fi
+
 echo -e "////////////////////////////////////////////////////////////////////"
 echo -e "///${cyan}   Installing Service:                                        ${nocolor}///"
 echo -e "////////////////////////////////////////////////////////////////////"
@@ -372,110 +399,113 @@ echo -e -n "   --> Set Permissons:                    "
 sudo chmod 755 /home/pi/oled_phoniebox/scripts/toggle_display/toggle_display.sh > /dev/null 2>&1
 echo -e "${green}Done${nocolor}"
 echo -e ""
-read -n 1 -s -r -p "Press any key to continue"
-clear
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e "///${cyan}   GPIO Buttons Control                                       ${nocolor}///"
-echo -e "////////////////////////////////////////////////////////////////////"
-echo -e ""
-echo -e "If jukebox4kids should be installed already! You have to choose"
-echo -e "between the new GPIO Button Settings in the Phoniebox Repository"
-echo -e "or the old one with enhanced display control features like:"
-echo -e "  ${yellow}Brightness control${nocolor}"
-echo -e "  ${yellow}Status Screen${nocolor}"
-echo -e "  ${yellow}OLED mode control${nocolor}"
-echo -e ""
-echo -e "${cyan}Option 1:${nocolor} RECOMMEND"
-echo -e "Install a new Button control service for the Phoniebox & display."
-echo -e "The origin Repository remains untouched, the service will be"
-echo -e "just disabled!"
-echo -e ""
-echo -e "${cyan}Option 2:${nocolor}"
-echo -e "Just skip... Phoniebox will work well without display control!"
-echo -e " "
-options=("Option 1: Replace service for disyplay control" "Option 2: Skip")
 
-select opt in "${options[@]}"
-do
-    case $opt in
-        "Option 1: Deactivate GPIO Pin 3")
-			echo -e " "
-			sudo service phoniebox-gpio-buttons stop > /dev/null 2>&1
-            sudo sed -i -e "s:shut = Button(3, hold_time=2):#shut = Button(3, hold_time=2):g" /home/pi/RPi-Jukebox-RFID/scripts/gpio-buttons.py > /dev/null
-			sudo service phoniebox-gpio-buttons start > /dev/null 2>&1
-			echo -e "   --> Button replacement finished"
-			echo -e ""
-            break
-            ;;
-        "Option 1: Replace service for disyplay control")
-			echo -e " "
-			echo -e -n "   --> Delete old Service:                "
-			#sudo chmod +x ${installPath}/scripts/gpio-buttons/gpio-buttons.py > /dev/null
-			sudo service phoniebox-gpio-buttons stop > /dev/null 2>&1
-			sudo systemctl disable phoniebox-gpio-buttons > /dev/null  2>&1
-			sudo systemctl disable phoniebox-gpio-control.service > /dev/null  2>&1
-			sudo rm /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null  2>&1
-			echo -e "${green}Done${nocolor}"
-			echo -e -n "   --> Installing Service:                "
-			sudo cp ${installPath}/templates/gpio-service.template /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null 2>&1
-			sudo sed -i -e "s:<PATH>:${installPath}:g" /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null 2>&1
-			sudo chown root:root /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null 2>&1
-			sudo chmod 644 /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null 2>&1
-			sudo systemctl enable phoniebox-gpio-buttons > /dev/null 2>&1
-			sudo service phoniebox-gpio-buttons start > /dev/null 2>&1
-			echo -e "${green}Done${nocolor}"
-			echo -e ""
-			echo -e "${yellow}Please edit the button configuration to match your${nocolor}"
-			echo -e "${yellow}hardware! Config file:${nocolor}"
-			echo -e "${yellow}/home/pi/oled_phoniebox/scripts/gpio-buttons/gpio-buttons.py${nocolor}"
-			echo -e ""
-            break
-            ;;
-        "Option 2: Skip")
-			break
-            ;;
-        *) echo -e "Invalid option $REPLY";;
-    esac
-done
-echo -e ""
-read -n 1 -s -r -p "Press any key to continue"
+if [[ ${INTERACTIVE} == "true" ]]; then
+    read -n 1 -s -r -p "Press any key to continue"
+    clear
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e "///${cyan}   GPIO Buttons Control                                       ${nocolor}///"
+    echo -e "////////////////////////////////////////////////////////////////////"
+    echo -e ""
+    echo -e "If jukebox4kids should be installed already! You have to choose"
+    echo -e "between the new GPIO Button Settings in the Phoniebox Repository"
+    echo -e "or the old one with enhanced display control features like:"
+    echo -e "  ${yellow}Brightness control${nocolor}"
+    echo -e "  ${yellow}Status Screen${nocolor}"
+    echo -e "  ${yellow}OLED mode control${nocolor}"
+    echo -e ""
+    echo -e "${cyan}Option 1:${nocolor} RECOMMEND"
+    echo -e "Install a new Button control service for the Phoniebox & display."
+    echo -e "The origin Repository remains untouched, the service will be"
+    echo -e "just disabled!"
+    echo -e ""
+    echo -e "${cyan}Option 2:${nocolor}"
+    echo -e "Just skip... Phoniebox will work well without display control!"
+    echo -e " "
+    options=("Option 1: Replace service for disyplay control" "Option 2: Skip")
 
-clear
-echo -e ""
-echo -e "/////////////////////////////////////////////////////////////////////////////////////////////////////////"
-echo -e "///                                                                                                   ///"
-echo -e "///   ${green}██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗      █████╗ ████████╗██╗ ██████╗ ███╗   ██╗   ${nocolor}///";
-echo -e "///   ${green}██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║   ${nocolor}///";
-echo -e "///   ${green}██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║   ${nocolor}///";
-echo -e "///   ${green}██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║   ${nocolor}///";
-echo -e "///   ${green}██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║   ${nocolor}///";
-echo -e "///   ${green}╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝   ${nocolor}///";
-echo -e "///                                                                                                   ///";
-echo -e "///   ${green} ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗     ███████╗████████╗███████╗                           ${nocolor}///";
-echo -e "///   ${green}██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║     ██╔════╝╚══██╔══╝██╔════╝                           ${nocolor}///";
-echo -e "///   ${green}██║     ██║   ██║██╔████╔██║██████╔╝██║     █████╗     ██║   █████╗                             ${nocolor}///";
-echo -e "///   ${green}██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║     ██╔══╝     ██║   ██╔══╝                             ${nocolor}///";
-echo -e "///   ${green}╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ███████╗███████╗   ██║   ███████╗                           ${nocolor}///";
-echo -e "///   ${green} ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚══════╝╚══════╝   ╚═╝   ╚══════╝                           ${nocolor}///";
-echo -e "///                                                                                                   ///"
-echo -e "/////////////////////////////////////////////////////////////////////////////////////////////////////////"
-echo -e ""
-echo -e "If this is a fresh installation, a reboot is required..."
-echo -e ""
-echo -e "Do you want to reboot now?"
-echo -e " "
-options=("Reboot" "Quit")
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "Option 1: Deactivate GPIO Pin 3")
+                echo -e " "
+                sudo service phoniebox-gpio-buttons stop > /dev/null 2>&1
+                sudo sed -i -e "s:shut = Button(3, hold_time=2):#shut = Button(3, hold_time=2):g" /home/pi/RPi-Jukebox-RFID/scripts/gpio-buttons.py > /dev/null
+                sudo service phoniebox-gpio-buttons start > /dev/null 2>&1
+                echo -e "   --> Button replacement finished"
+                echo -e ""
+                break
+                ;;
+            "Option 1: Replace service for disyplay control")
+                echo -e " "
+                echo -e -n "   --> Delete old Service:                "
+                #sudo chmod +x ${installPath}/scripts/gpio-buttons/gpio-buttons.py > /dev/null
+                sudo service phoniebox-gpio-buttons stop > /dev/null 2>&1
+                sudo systemctl disable phoniebox-gpio-buttons > /dev/null  2>&1
+                sudo systemctl disable phoniebox-gpio-control.service > /dev/null  2>&1
+                sudo rm /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null  2>&1
+                echo -e "${green}Done${nocolor}"
+                echo -e -n "   --> Installing Service:                "
+                sudo cp ${installPath}/templates/gpio-service.template /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null 2>&1
+                sudo sed -i -e "s:<PATH>:${installPath}:g" /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null 2>&1
+                sudo chown root:root /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null 2>&1
+                sudo chmod 644 /etc/systemd/system/phoniebox-gpio-buttons.service > /dev/null 2>&1
+                sudo systemctl enable phoniebox-gpio-buttons > /dev/null 2>&1
+                sudo service phoniebox-gpio-buttons start > /dev/null 2>&1
+                echo -e "${green}Done${nocolor}"
+                echo -e ""
+                echo -e "${yellow}Please edit the button configuration to match your${nocolor}"
+                echo -e "${yellow}hardware! Config file:${nocolor}"
+                echo -e "${yellow}/home/pi/oled_phoniebox/scripts/gpio-buttons/gpio-buttons.py${nocolor}"
+                echo -e ""
+                break
+                ;;
+            "Option 2: Skip")
+                break
+                ;;
+            *) echo -e "Invalid option $REPLY";;
+        esac
+    done
+    echo -e ""
+    read -n 1 -s -r -p "Press any key to continue"
 
-select opt in "${options[@]}"
-do
-    case $opt in
-        "Reboot")
-            sudo reboot
-            ;;
+    clear
+    echo -e ""
+    echo -e "/////////////////////////////////////////////////////////////////////////////////////////////////////////"
+    echo -e "///                                                                                                   ///"
+    echo -e "///   ${green}██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗      █████╗ ████████╗██╗ ██████╗ ███╗   ██╗   ${nocolor}///";
+    echo -e "///   ${green}██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║   ${nocolor}///";
+    echo -e "///   ${green}██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║   ${nocolor}///";
+    echo -e "///   ${green}██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║   ${nocolor}///";
+    echo -e "///   ${green}██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║   ${nocolor}///";
+    echo -e "///   ${green}╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝   ${nocolor}///";
+    echo -e "///                                                                                                   ///";
+    echo -e "///   ${green} ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗     ███████╗████████╗███████╗                           ${nocolor}///";
+    echo -e "///   ${green}██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║     ██╔════╝╚══██╔══╝██╔════╝                           ${nocolor}///";
+    echo -e "///   ${green}██║     ██║   ██║██╔████╔██║██████╔╝██║     █████╗     ██║   █████╗                             ${nocolor}///";
+    echo -e "///   ${green}██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║     ██╔══╝     ██║   ██╔══╝                             ${nocolor}///";
+    echo -e "///   ${green}╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ███████╗███████╗   ██║   ███████╗                           ${nocolor}///";
+    echo -e "///   ${green} ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚══════╝╚══════╝   ╚═╝   ╚══════╝                           ${nocolor}///";
+    echo -e "///                                                                                                   ///"
+    echo -e "/////////////////////////////////////////////////////////////////////////////////////////////////////////"
+    echo -e ""
+    echo -e "If this is a fresh installation, a reboot is required..."
+    echo -e ""
+    echo -e "Do you want to reboot now?"
+    echo -e " "
+    options=("Reboot" "Quit")
 
-        "Quit")
-            exit
-            ;;
-        *) echo -e "invalid option $REPLY";;
-    esac
-done
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "Reboot")
+                sudo reboot
+                ;;
+
+            "Quit")
+                exit
+                ;;
+            *) echo -e "invalid option $REPLY";;
+        esac
+    done
+fi
